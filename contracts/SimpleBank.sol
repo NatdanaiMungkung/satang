@@ -65,9 +65,5 @@ contract SimpleBank {
         return depositInterest > loanInterest ? depositInterest - loanInterest : 0;
     }
 
-    function getBankBalance() public view returns (uint256) {
-    return sttToken.balanceOf(address(this));
-}
-
 
 }
