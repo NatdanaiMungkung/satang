@@ -9,8 +9,8 @@ contract SimpleBank {
     mapping(address => uint256) public deposits;
     mapping(address => uint256) public loans;
     uint256 public totalDeposits;
-
-    uint256 public constant MAX_LOAN_RATIO = 80;
+    uint256 public reserveBalance;
+    uint256 public constant MAX_LOAN_RATIO = 50;
     uint256 public constant INTEREST_RATE = 10;  // 0.01%
     uint256 public constant LOAN_INTEREST_RATE = 100;  // 0.1%
     uint256 public constant FUND_RESERVE_RATIO = 50;  // 50%
@@ -26,10 +26,11 @@ contract SimpleBank {
     }
 
     function deposit(uint256 _amount) public {
-        require(sttToken.transferFrom(msg.sender, address(this), _amount));
-        deposits[msg.sender] += _amount;
-        totalDeposits += _amount;
-        emit Deposit(msg.sender, _amount);
+      require(sttToken.transferFrom(msg.sender, address(this), _amount));
+      deposits[msg.sender] += _amount;
+      totalDeposits += _amount;
+      reserveBalance += _amount / 2; // add 50% of deposited amount to reserve balance
+      emit Deposit(msg.sender, _amount);
     }
 
     function withdraw(uint256 _amount) public {
